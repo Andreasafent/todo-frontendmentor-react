@@ -1,9 +1,8 @@
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { useState } from "react";
 
-function CreateTodo() {
+function CreateTodo({addTodo}) {
 	const [todo, setTodo] = useState("");
-    const [todos, setTodos] = useState([]);
 	const onChange = (e) => {
 		setTodo(e.target.value);
 	};
@@ -13,12 +12,9 @@ function CreateTodo() {
             alert("Please enter a valid todo");
             return;
         }
-        setTodos([...todos, todo]);
+        addTodo(todo)
+        setTodo("");
     }
-
-    useEffect(()=>{
-        console.log(todos)
-    }, [todos])
 
 	return (
 		<div

@@ -1,9 +1,15 @@
 // import { useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import CreateTodo from "./components/createTodo";
 import Todo from "./components/todo";
 
 function App() {
+	const [todos, setTodos] = useState([]);
+
+	const addTodo = (text)=>{
+		setTodos([...todos, text])
+	}
 	return (
 		<div
 			className="h-[100vh] main"
@@ -19,7 +25,9 @@ function App() {
 				</div>
 
 
-				<CreateTodo/>
+				<CreateTodo
+					addTodo={addTodo}
+				/>
 
 
 				<div
@@ -27,6 +35,7 @@ function App() {
 					style={{ backgroundColor: " hsl(235, 24%, 19%)" }}
 				>
 					<Todo/>
+					{todos}
 					<div className="flex items-center py-4 px-5 justify-between">
 						<p className="text-gray-500 text-sm">5 items left</p>
 						<p className="text-gray-500 text-sm">Clear completed</p>
