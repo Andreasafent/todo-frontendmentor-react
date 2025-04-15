@@ -1,8 +1,11 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant light (&:where(.light, .light *));
 
 @theme{
     --breakpoint-xs: 376px;
 }
+
 
 /* *{
     outline:solid 2px red;
