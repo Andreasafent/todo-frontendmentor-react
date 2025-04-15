@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+@theme{
+    --breakpoint-xs: 376px;
+}
+
+/* *{
+    outline:solid 2px red;
+} */

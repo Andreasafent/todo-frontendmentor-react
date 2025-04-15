@@ -1,20 +1,8 @@
 // import { useEffect } from "react";
-import { useState } from "react";
+// import { useState } from "react";
 
-function CreateTodo({addTodo}) {
-	const [todo, setTodo] = useState("");
-	const onChange = (e) => {
-		setTodo(e.target.value);
-	};
-
-    const onAdd = ()=>{
-        if(!todo || todo.length<3){
-            alert("Please enter a valid todo");
-            return;
-        }
-        addTodo(todo)
-        setTodo("");
-    }
+function CreateTodo() {
+	
 
 	return (
 		<div
@@ -26,15 +14,15 @@ function CreateTodo({addTodo}) {
 				className="appearance-none icon text-white rounded-full w-5 h-5 border-1 border-gray-700 checked:bg-purple-500"
 			/>
 			<input
-				value={todo}
-				onChange={onChange}
-				className="text-white text-xs"
+				// value={todo}
+				// onChange={onChange}
+				className="text-white/70 text-xs appearance-none w-full bg-transparent focus:outline-none"
 				placeholder="Create a new todo..."
-				onKeyDown={(e) => {
-					if (e.key === "Enter") {
-						onAdd()
-					}
-				}}
+				// onKeyDown={(e) => {
+				// 	if (e.key === "Enter") {
+				// 		onAdd()
+				// 	}
+				// }}
 			/>
 		</div>
 	);
