@@ -31,7 +31,7 @@ function CreateTodo({onAdd}) {
             <input
                 value={todo}
                 onChange={onChange}
-                className="text-black dark:text-white text-xs appearance-none grow bg-transparent focus:outline-none"
+                className="text-black dark:text-white text-md appearance-none grow bg-transparent focus:outline-none"
                 placeholder="Create a new todo..."
                 onKeyDown={(e)=>{
                     if(e.key=="Enter"){

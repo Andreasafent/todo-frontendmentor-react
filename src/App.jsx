@@ -7,21 +7,33 @@ import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 function App() {
 
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
-    const [todos, setTodos] = useState(()=>{
+    const [todos, setTodos] = useState(() => {
         const stored = localStorage.getItem("todos");
         return stored ? JSON.parse(stored) : [];
     });
 
+    const [todosLeft, setTodosLeft] = useState();
+
     const onAdd = (todo) => {
-        setTodos(prev=>[...prev, {id:Date.now(), text:todo, completed: false}])
+        setTodos(prev => [...prev, { id: Date.now(), text: todo, completed: false }])
     }
 
-    const deleteTodo = (id) =>{
+    const deleteTodo = (id) => {
         setTodos(prev => prev.filter(todo => todo.id !== id))
+    }
+
+    const toggleTodo = (id) => {
+        setTodos(prev =>
+            prev.map(todo =>
+                todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            )
+        )
     }
 
     useEffect(() => {
         localStorage.setItem("todos", JSON.stringify(todos))
+        const count = todos.filter(todo=> !todo.completed).length;
+        setTodosLeft(count)
     }, [todos])
 
     useEffect(() => {
@@ -31,6 +43,8 @@ function App() {
         document.documentElement.classList.add(theme);
 
     }, [theme])
+
+
 
     return (
         <div
@@ -78,12 +92,13 @@ function App() {
                                     <Todo
                                         key={todo.id}
                                         todo={todo}
+                                        onToggle={toggleTodo}
                                         onDelete={deleteTodo}
                                     />
                                 ))}
                                 <div className="flex items-center py-4 px-5 justify-between">
                                     <div className="w-[110px]">
-                                        <p className="text-black/50 dark:text-white/30 text-sm">{todos.length} items left</p>
+                                        <p className="text-black/50 dark:text-white/30 text-sm">{todosLeft} items left</p>
                                     </div>
                                     <div className="hidden md:flex items-center justify-center gap-5 text-black/50 dark:text-white/30 text-sm">
                                         <button className="hover:text-[#3a7bfd] font-bold hover:cursor-pointer">All</button>
