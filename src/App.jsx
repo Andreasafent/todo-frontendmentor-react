@@ -7,14 +7,21 @@ import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 function App() {
 
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
-    const [todos, setTodos] = useState([]);
+    const [todos, setTodos] = useState(()=>{
+        const stored = localStorage.getItem("todos");
+        return stored ? JSON.parse(stored) : [];
+    });
 
     const onAdd = (todo) => {
-        setTodos([...todos, todo])
+        setTodos(prev=>[...prev, {id:Date.now(), text:todo, completed: false}])
+    }
+
+    const deleteTodo = (id) =>{
+        setTodos(prev => prev.filter(todo => todo.id !== id))
     }
 
     useEffect(() => {
-        console.log(todos)
+        localStorage.setItem("todos", JSON.stringify(todos))
     }, [todos])
 
     useEffect(() => {
@@ -67,10 +74,11 @@ function App() {
                             <div
                                 className="bg-[#fafafa] text-white flex flex-col rounded-md dark:bg-[#25273c] shadow-xl "
                             >
-                                {todos.map((todo, index, array) => (
+                                {todos.map((todo) => (
                                     <Todo
-                                        key={index}
+                                        key={todo.id}
                                         todo={todo}
+                                        onDelete={deleteTodo}
                                     />
                                 ))}
                                 <div className="flex items-center py-4 px-5 justify-between">
