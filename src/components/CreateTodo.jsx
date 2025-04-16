@@ -1,8 +1,24 @@
-// import { useEffect } from "react";
-// import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function CreateTodo() {
+function CreateTodo({onAdd}) {
+    const [todo, setTodo] = useState("");
 
+    const onChange = (e)=>{
+        const input = e.target.value;
+        
+        setTodo(input)
+    }
+
+    const onSubmit = ()=>{
+        const trimmed = todo.trim();
+
+        if(trimmed.length<=3){
+            alert("Please enter more than 3 characters");
+            return;
+        }
+        onAdd(trimmed);
+        setTodo("");
+    }
 
     return (
         <div
@@ -13,15 +29,15 @@ function CreateTodo() {
                 className="appearance-none icon text-white rounded-full w-5 h-5 border-1 border-gray-700 checked:bg-purple-500"
             />
             <input
-                // value={todo}
-                // onChange={onChange}
-                className="text-black dark:text-white text-xs appearance-none w-full bg-transparent focus:outline-none"
+                value={todo}
+                onChange={onChange}
+                className="text-black dark:text-white text-xs appearance-none grow bg-transparent focus:outline-none"
                 placeholder="Create a new todo..."
-            // onKeyDown={(e) => {
-            // 	if (e.key === "Enter") {
-            // 		onAdd()
-            // 	}
-            // }}
+                onKeyDown={(e)=>{
+                    if(e.key=="Enter"){
+                        onSubmit();
+                    }
+                }}
             />
         </div>
     );
