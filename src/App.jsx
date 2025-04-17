@@ -130,7 +130,25 @@ function App() {
                             <div className="text-black/50 dark:text-white/30 mt-5 text-center text-sm">Drag and drop to reorder list</div>
                         </>
                     ) : (
-                        null
+                        <div className="flex flex-col items-center justify-center py-10 gap-3 text-center">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-30 w-30 text-gray-300 dark:text-white/20"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth={1.5}
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M9 12h6m-6 4h6m-7.5 4h9a2 2 0 002-2V6a2 2 0 00-2-2h-9a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                />
+                            </svg>
+                            <p className="text-lg text-gray-400 dark:text-white/30 font-medium">
+                                No todos yet. Take a breath 🌱
+                            </p>
+                        </div>                        
                     )}
                 </main>
             </div>
