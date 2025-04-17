@@ -3,6 +3,7 @@ import "./App.css";
 import CreateTodo from "./components/createTodo";
 import Todo from "./components/todo";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
+import TabsComponent from "./components/TabsComponent";
 
 function App() {
 
@@ -12,7 +13,7 @@ function App() {
         return stored ? JSON.parse(stored) : [];
     });
 
-    const [todosLeft, setTodosLeft] = useState();
+    const [filter, setFilter] = useState("all");
 
     const onAdd = (todo) => {
         setTodos(prev => [...prev, { id: Date.now(), text: todo, completed: false }])
@@ -30,14 +31,19 @@ function App() {
         )
     }
 
-    const deleteCompleted = ()=>{
-        setTodos(todos.filter(todo=> !todo.completed))
+    const deleteCompleted = () => {
+        setTodos(todos.filter(todo => !todo.completed))
+        setFilter("all")
     }
+
+    const filteredTodos = todos.filter(todo => {
+        if (filter === "active") return !todo.completed;
+        if (filter === "completed") return todo.completed;
+        return true;
+    })
 
     useEffect(() => {
         localStorage.setItem("todos", JSON.stringify(todos))
-        const count = todos.filter(todo=> !todo.completed).length;
-        setTodosLeft(count)
     }, [todos])
 
     useEffect(() => {
@@ -47,8 +53,6 @@ function App() {
         document.documentElement.classList.add(theme);
 
     }, [theme])
-
-
 
     return (
         <div
@@ -92,7 +96,7 @@ function App() {
                             <div
                                 className="bg-[#fafafa] text-white flex flex-col rounded-md dark:bg-[#25273c] shadow-xl "
                             >
-                                {todos.map((todo) => (
+                                {filteredTodos.map((todo) => (
                                     <Todo
                                         key={todo.id}
                                         todo={todo}
@@ -102,24 +106,25 @@ function App() {
                                 ))}
                                 <div className="flex items-center py-4 px-5 justify-between">
                                     <div className="w-[110px]">
-                                        <p className="text-black/50 dark:text-white/30 text-sm">{todosLeft} items left</p>
+                                        <p className="text-black/50 dark:text-white/30 text-sm">{filteredTodos.length} items left</p>
                                     </div>
                                     <div className="hidden md:flex items-center justify-center gap-5 text-black/50 dark:text-white/30 text-sm">
-                                        <button className="hover:text-[#3a7bfd] font-bold hover:cursor-pointer">All</button>
-                                        <button className="hover:text-[#3a7bfd] font-bold hover:cursor-pointer">Active</button>
-                                        <button className="hover:text-[#3a7bfd] font-bold hover:cursor-pointer">Completed</button>
+                                        <TabsComponent
+                                            setFilter={setFilter}
+                                        />
                                     </div>
                                     <div className="w-[110px] text-end">
-                                        <button onClick={()=> deleteCompleted()} className="text-black/50 dark:text-white/30 text-sm hover:cursor-pointer">Clear completed</button>
+                                        <button onClick={() => deleteCompleted()} className="text-black/50 dark:text-white/30 text-sm hover:cursor-pointer">Clear completed</button>
                                     </div>
                                 </div>
 
                             </div>
 
                             <div className="bg-[#fafafa] dark:bg-[#25273c] md:hidden flex items-center justify-center gap-5 text-black/50 dark:text-white/30 py-4 rounded-md text-md shadow-lg">
-                                <button className="hover:text-[#3a7bfd] font-bold hover:cursor-pointer">All</button>
-                                <button className="hover:text-[#3a7bfd] font-bold hover:cursor-pointer">Active</button>
-                                <button className="hover:text-[#3a7bfd] font-bold hover:cursor-pointer">Completed</button>
+                                <TabsComponent
+                                    filter={filter}
+                                    setFilter={setFilter}
+                                />
                             </div>
 
                             <div className="text-black/50 dark:text-white/30 mt-5 text-center text-sm">Drag and drop to reorder list</div>
