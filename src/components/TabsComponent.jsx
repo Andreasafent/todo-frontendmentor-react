@@ -1,9 +1,18 @@
 function TabsComponent({ filter, setFilter }) {
+
+    const tabs = [
+        "all",
+        "active",
+        "completed",
+    ]
+
     return (
         <>
-            <button onClick={()=>setFilter("all")} className={`${filter==="all" ? "text-[#3a7bfd]" : ""} hover:text-[#3a7bfd] font-bold hover:cursor-pointer`}>All</button>
-            <button onClick={()=>setFilter("active")} className={`${filter==="active" ? "text-[#3a7bfd]" : ""} hover:text-[#3a7bfd] font-bold hover:cursor-pointer`}>Active</button>
-            <button onClick={()=>setFilter("completed")} className={`${filter==="completed" ? "text-[#3a7bfd]" : ""} hover:text-[#3a7bfd] font-bold hover:cursor-pointer`}>Completed</button>
+            { 
+                tabs.map(tab=>(
+                    <button key={tab} onClick={() => setFilter(tab)} className={`${filter === tab ? "text-[#3a7bfd]" : ""} hover:text-[#3a7bfd] font-bold hover:cursor-pointer`}>{tab.charAt(0).toUpperCase() + tab.slice(1)}</button>
+                ))
+            }
         </>
     );
 }

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import CreateTodo from "./components/createTodo";
-import Todo from "./components/todo";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 import TabsComponent from "./components/TabsComponent";
+import { useMediaQuery } from "react-responsive";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, } from '@dnd-kit/sortable';
+import SortableItem from "./components/SortableItem";
 
 function App() {
 
@@ -12,8 +15,39 @@ function App() {
         const stored = localStorage.getItem("todos");
         return stored ? JSON.parse(stored) : [];
     });
-
     const [filter, setFilter] = useState(localStorage.getItem("filter") || "all");
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
+    function handleDragEnd(event) {
+        const { active, over } = event;
+    
+        if (!over) return;
+    
+        if (active.id !== over.id) {
+            setTodos((todos) => {
+                const oldIndex = todos.findIndex(todo => todo.id === active.id);
+                const newIndex = todos.findIndex(todo => todo.id === over.id);
+    
+                return arrayMove(todos, oldIndex, newIndex);
+            });
+        }
+    }
+
+    const isMobile = useMediaQuery({ maxWidth: 375 });
+    const bgImage = isMobile
+        ? theme === "dark"
+            ? '/bg-mobile-dark.jpg'
+            : '/bg-mobile-light.jpg'
+        : theme === 'dark'
+            ? '/bg-desktop-dark.jpg'
+            : '/bg-desktop-light.jpg';
+
 
     const onAdd = (todo) => {
         setTodos(prev => [...prev, { id: Date.now(), text: todo, completed: false }])
@@ -33,7 +67,7 @@ function App() {
 
     const deleteCompleted = () => {
         setTodos(todos.filter(todo => !todo.completed));
-        if(filter !== "completed"){
+        if (filter !== "completed") {
             return;
         }
         setFilter("all");
@@ -57,7 +91,7 @@ function App() {
 
     }, [theme])
 
-    useEffect(()=>{
+    useEffect(() => {
         localStorage.setItem("filter", filter);
     }, [filter])
 
@@ -65,10 +99,7 @@ function App() {
         <div
             className="h-[100vh] main w-full flex flex-col bg-[#e4e5f1] dark:bg-[#161722]"
         >
-            <img src="/bg-mobile-dark.jpg" className="xs:hidden light:hidden h-[200px] w-full object-cover" />
-            <img src="/bg-mobile-light.jpg" className="xs:hidden dark:hidden h-[200px] w-full object-cover" />
-            <img src="/bg-desktop-dark.jpg" className="hidden dark:xs:block h-[200px] w-full object-cover" />
-            <img src="/bg-desktop-light.jpg" className="hidden dark:hidden xs:block h-[200px] w-full object-cover" />
+            <img src={bgImage} className="h-[200px] w-full object-cover" />
             <div className="flex items-center justify-center w-full">
 
                 <main className="flex flex-col mt-[-180px] px-[30px] gap-5 py-5 w-full md:w-[768px]">
@@ -103,14 +134,41 @@ function App() {
                             <div
                                 className="bg-[#fafafa] text-white flex flex-col rounded-md dark:bg-[#25273c] shadow-xl "
                             >
-                                {filteredTodos.map((todo) => (
+                                {/* {filteredTodos.map((todo) => (
                                     <Todo
                                         key={todo.id}
                                         todo={todo}
                                         onToggle={toggleTodo}
                                         onDelete={deleteTodo}
                                     />
-                                ))}
+                                ))} */}
+                                <DndContext
+                                    sensors={sensors}
+                                    collisionDetection={closestCenter}
+                                    onDragEnd={handleDragEnd}
+                                >
+                                    <SortableContext
+                                        items={todos.map(todo => todo.id)} // 🔁 Full list here
+                                        strategy={verticalListSortingStrategy}
+                                    >
+                                        {
+                                            todos.map(todo =>
+                                                // 🔍 Conditionally render based on filter
+                                                (filter === "all" ||
+                                                    (filter === "active" && !todo.completed) ||
+                                                    (filter === "completed" && todo.completed)) && (
+                                                    <SortableItem
+                                                        key={todo.id}
+                                                        id={todo.id}
+                                                        todo={todo}
+                                                        onToggle={toggleTodo}
+                                                        onDelete={deleteTodo}
+                                                    />
+                                                )
+                                            )
+                                        }
+                                    </SortableContext>
+                                </DndContext>
                                 <div className="flex items-center py-4 px-5 justify-between">
                                     <div className="w-[110px]">
                                         <p className="text-black/50 dark:text-white/30 text-sm">{filteredTodos.length} items left</p>
@@ -156,7 +214,7 @@ function App() {
                             <p className="text-lg text-gray-400 dark:text-white/30 font-medium">
                                 No todos yet. Take a breath 🌱
                             </p>
-                        </div>                        
+                        </div>
                     )}
                 </main>
             </div>
