@@ -4,7 +4,7 @@ import CreateTodo from "./components/createTodo";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 import TabsComponent from "./components/TabsComponent";
 import { useMediaQuery } from "react-responsive";
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, } from '@dnd-kit/core';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, MouseSensor, TouchSensor, } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, } from '@dnd-kit/sortable';
 import SortableItem from "./components/SortableItem";
 
@@ -17,23 +17,31 @@ function App() {
     });
     const [filter, setFilter] = useState(localStorage.getItem("filter") || "all");
 
-    const sensors = useSensors(
-        useSensor(PointerSensor),
-        useSensor(KeyboardSensor, {
-            coordinateGetter: sortableKeyboardCoordinates,
-        })
-    );
+    const mouseSensor = useSensor(MouseSensor, {
+        activationConstraint: {
+            distance: 5,
+        },
+    });
+
+    const touchSensor = useSensor(TouchSensor, {
+        activationConstraint: {
+            delay: 100,
+            tolerance: 5,
+        },
+    });
+
+    const sensors = useSensors(mouseSensor, touchSensor);
 
     function handleDragEnd(event) {
         const { active, over } = event;
-    
+
         if (!over) return;
-    
+
         if (active.id !== over.id) {
             setTodos((todos) => {
                 const oldIndex = todos.findIndex(todo => todo.id === active.id);
                 const newIndex = todos.findIndex(todo => todo.id === over.id);
-    
+
                 return arrayMove(todos, oldIndex, newIndex);
             });
         }
@@ -97,7 +105,7 @@ function App() {
 
     return (
         <div
-            className="h-[100vh] main w-full flex flex-col bg-[#e4e5f1] dark:bg-[#161722]"
+            className="min-h-[100vh] main w-full flex flex-col bg-[#e4e5f1] dark:bg-[#161722]"
         >
             <img src={bgImage} className="h-[200px] w-full object-cover" />
             <div className="flex items-center justify-center w-full">
