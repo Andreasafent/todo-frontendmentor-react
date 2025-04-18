@@ -13,7 +13,7 @@ function App() {
         return stored ? JSON.parse(stored) : [];
     });
 
-    const [filter, setFilter] = useState("all");
+    const [filter, setFilter] = useState(localStorage.getItem("filter") || "all");
 
     const onAdd = (todo) => {
         setTodos(prev => [...prev, { id: Date.now(), text: todo, completed: false }])
@@ -32,8 +32,11 @@ function App() {
     }
 
     const deleteCompleted = () => {
-        setTodos(todos.filter(todo => !todo.completed))
-        setFilter("all")
+        setTodos(todos.filter(todo => !todo.completed));
+        if(filter !== "completed"){
+            return;
+        }
+        setFilter("all");
     }
 
     const filteredTodos = todos.filter(todo => {
@@ -53,6 +56,10 @@ function App() {
         document.documentElement.classList.add(theme);
 
     }, [theme])
+
+    useEffect(()=>{
+        localStorage.setItem("filter", filter);
+    }, [filter])
 
     return (
         <div
@@ -110,6 +117,7 @@ function App() {
                                     </div>
                                     <div className="hidden md:flex items-center justify-center gap-5 text-black/50 dark:text-white/30 text-sm">
                                         <TabsComponent
+                                            filter={filter}
                                             setFilter={setFilter}
                                         />
                                     </div>
