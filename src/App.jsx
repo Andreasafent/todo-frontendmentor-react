@@ -178,7 +178,7 @@ function App() {
                                     </SortableContext>
                                 </DndContext>
                                 <div className="flex items-center py-4 px-5 justify-between">
-                                    <div className="w-[110px]">
+                                    <div className="w-[150px]">
                                         <p className="text-black/50 dark:text-white/30 text-sm">{filteredTodos.length} items left</p>
                                     </div>
                                     <div className="hidden md:flex items-center justify-center gap-5 text-black/50 dark:text-white/30 text-sm">
@@ -187,7 +187,7 @@ function App() {
                                             setFilter={setFilter}
                                         />
                                     </div>
-                                    <div className="w-[110px] text-end">
+                                    <div className="w-[150px] text-end">
                                         <button onClick={() => deleteCompleted()} className="text-black/50 dark:text-white/30 text-sm hover:cursor-pointer">Clear completed</button>
                                     </div>
                                 </div>
