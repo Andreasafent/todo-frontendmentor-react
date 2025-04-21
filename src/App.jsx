@@ -113,7 +113,7 @@ function App() {
                 <main className="flex flex-col mt-[-180px] px-[30px] gap-5 py-5 w-full md:w-[768px]">
                     <div className="flex justify-between items-center">
                         <div className="">
-                            <p className="text-white tracking-[20px] font-bold text-3xl">TODO</p>
+                            <p className="text-white tracking-[20px] font-bold text-3xl font-main-bold">TODO</p>
                         </div>
                         <button
                             className="btn"
@@ -179,7 +179,7 @@ function App() {
                                 </DndContext>
                                 <div className="flex items-center py-4 px-5 justify-between">
                                     <div className="w-[150px]">
-                                        <p className="text-black/50 dark:text-white/30 text-sm">{filteredTodos.length} items left</p>
+                                        <p className="text-black/50 dark:text-white/30 text-sm font-main">{filteredTodos.length} items left</p>
                                     </div>
                                     <div className="hidden md:flex items-center justify-center gap-5 text-black/50 dark:text-white/30 text-sm">
                                         <TabsComponent
@@ -188,7 +188,7 @@ function App() {
                                         />
                                     </div>
                                     <div className="w-[150px] text-end">
-                                        <button onClick={() => deleteCompleted()} className="text-black/50 dark:text-white/30 text-sm hover:cursor-pointer">Clear completed</button>
+                                        <button onClick={() => deleteCompleted()} className="text-black/50 dark:text-white/30 text-sm hover:cursor-pointer font-main">Clear completed</button>
                                     </div>
                                 </div>
 
@@ -201,7 +201,7 @@ function App() {
                                 />
                             </div>
 
-                            <div className="text-black/50 dark:text-white/30 mt-5 text-center text-sm">Drag and drop to reorder list</div>
+                            <div className="text-black/50 dark:text-white/30 mt-5 text-center text-sm font-main">Drag and drop to reorder list</div>
                         </>
                     ) : (
                         <div className="flex flex-col items-center justify-center py-10 gap-3 text-center">

@@ -16,7 +16,7 @@ function Todo({ todo, onDelete, onToggle, dragListeners, dragAttributes }) {
                 checked={todo.completed}
                 className="appearance-none icon text-white rounded-full w-5 h-5 border-1 border-gray-700 checked:bg-purple-500 hover:cursor-pointer"
             />
-            <p className={`text-black dark:text-white/80 flex-1 text-md overflow-x-auto ${todo.completed ? 'line-through opacity-30' : ""}`}>{todo.text}</p>
+            <p className={`font-main text-black dark:text-white/80 flex-1 text-md overflow-x-auto ${todo.completed ? 'line-through opacity-30' : ""}`}>{todo.text}</p>
 
             <XMarkIcon onClick={() => onDelete(todo.id)} className="h-6 w-6 text-black/50 dark:text-white/70 dark:text-white hover:cursor-pointer" />
 
